@@ -20,24 +20,60 @@ navigation?.querySelectorAll('a').forEach((link) => {
   });
 });
 
-const enquiryForm = document.querySelector('#consultation-form');
-const formStatus = document.querySelector('.form-status');
+const consultationForm = document.getElementById("consultation-form");
 
-enquiryForm?.addEventListener('submit', (event) => {
-  event.preventDefault();
+if (consultationForm) {
+  const formStatus = consultationForm.querySelector(".form-status");
 
-  const name = new FormData(enquiryForm)
-    .get('name')
-    ?.toString()
-    .trim();
+  consultationForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-  if (formStatus) {
-    formStatus.textContent =
-      `Thank you${name ? `, ${name}` : ''}. Your enquiry details are ready to be sent.`;
-  }
+    const submitButton = consultationForm.querySelector(
+      'button[type="submit"]'
+    );
 
-  enquiryForm.reset();
-});
+    const originalButtonText = submitButton.innerHTML;
+
+    submitButton.disabled = true;
+    submitButton.innerHTML = "Sending...";
+
+    const data = {
+      name: consultationForm.elements["name"].value.trim(),
+      email: consultationForm.elements["email"].value.trim(),
+      phone: consultationForm.elements["phone"].value.trim(),
+      interest: consultationForm.elements["interest"].value,
+      message: consultationForm.elements["message"].value.trim()
+    };
+
+    try {
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbyfiGOTXi2JaqZOQS_hu0zPbZDx0biXG9Ko3BQmozwpwNDq8vPr8hMdEt4E0miQjHpT/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain"
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      formStatus.textContent =
+        "Thank you! Your enquiry has been sent successfully.";
+
+      consultationForm.reset();
+
+    } catch (error) {
+      console.error("Form submission error:", error);
+
+      formStatus.textContent =
+        "Something went wrong. Please try again.";
+    }
+
+    submitButton.disabled = false;
+    submitButton.innerHTML = originalButtonText;
+  });
+}
 
 
 /* =========================
@@ -234,3 +270,4 @@ if (document.readyState === 'loading') {
 } else {
   initCarousel();
 }
+

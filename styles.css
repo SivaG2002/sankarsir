@@ -2575,3 +2575,186 @@ em::after {
   .results-panel { margin-top: 50px; }
   .feedback-note { margin-bottom: 70px; padding: 43px 25px; border-radius: 24px; }
 }
+
+/* Contact page: preserve the desktop card treatment while giving small screens
+   a clearer reading order and comfortable touch targets. */
+@media (max-width: 900px) {
+  .contact-layout {
+    align-items: start;
+  }
+
+  .contact-form {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 660px) {
+  .contact-layout {
+    gap: 38px;
+    padding: 42px 0 48px;
+  }
+
+  .contact-copy h1 {
+    margin-bottom: 16px;
+    font-size: clamp(38px, 12vw, 48px);
+    letter-spacing: -2px;
+    line-height: 1.08;
+  }
+
+  .contact-copy .lead {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .contact-points {
+    margin: 28px 0 26px;
+  }
+
+  .contact-points p {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .contact-points span {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+  }
+
+  .contact-details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .contact-details p,
+  .contact-details p + p {
+    margin-top: 0;
+    padding: 15px 16px;
+    border-radius: 14px;
+  }
+
+  .contact-details > p:not(.contact-chip) span {
+    margin-bottom: 5px;
+  }
+
+  .contact-chip {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 4px;
+    align-items: start;
+  }
+
+  .contact-icon {
+    grid-row: 1 / span 2;
+    margin-top: 1px;
+  }
+
+  .contact-label,
+  .contact-details a {
+    grid-column: 2;
+  }
+
+  .contact-details a {
+    min-width: 0;
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+  }
+
+  .contact-form {
+    padding: 28px 20px 24px;
+    border-radius: 22px;
+    box-shadow: 0 14px 34px rgba(25, 37, 75, .09);
+  }
+
+  .contact-form h2 {
+    margin-bottom: 21px;
+    font-size: 25px;
+    letter-spacing: -1.1px;
+    line-height: 1.2;
+  }
+
+  .contact-form label {
+    margin-bottom: 17px;
+    font-size: 12px;
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    min-height: 48px;
+    padding: 12px 13px;
+    font-size: 16px;
+  }
+
+  .contact-form textarea {
+    min-height: 106px;
+  }
+
+  .contact-form .button {
+    min-height: 52px;
+    margin-top: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-icon {
+    animation: none;
+  }
+}
+
+/* The expertise carousel base rule appears after its original breakpoints.
+   Keep these overrides last so cards do not collapse into narrow columns. */
+@media (max-width: 900px) {
+  .expertise-grid.carousel-track .carousel-slide {
+    flex: 0 0 calc(50% - 9px);
+    min-width: calc(50% - 9px);
+  }
+}
+
+@media (max-width: 660px) {
+  .expertise-section .carousel-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .expertise-section .carousel-track {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .expertise-grid.carousel-track .carousel-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+
+  .expertise-section .carousel-nav {
+    width: 44px;
+    height: 44px;
+  }
+
+  .expertise-section .carousel-prev {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .expertise-section .carousel-next {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+}
