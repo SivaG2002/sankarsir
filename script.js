@@ -271,3 +271,76 @@ if (document.readyState === 'loading') {
   initCarousel();
 }
 
+/* =========================
+   PAGE ENTRY + SCROLL DOTS
+   ========================= */
+
+function initPageEnhancements() {
+  const firstSection = document.querySelector('main > section:first-child');
+
+  if (firstSection) {
+    const landingItems = firstSection.querySelectorAll(
+      '.eyebrow, h1, .intro-tagline, .lead, .hero-description, .hero-actions, .hero-note, .contact-points, .contact-details, .contact-form'
+    );
+
+    landingItems.forEach((item, index) => {
+      item.classList.add('landing-animate');
+      item.style.setProperty('--landing-delay', `${index * 70}ms`);
+    });
+  }
+
+  const dotCount = 5;
+  const scrollDots = document.createElement('nav');
+  scrollDots.className = 'scroll-dots';
+  scrollDots.setAttribute('aria-label', 'Page scroll positions');
+
+  const dots = Array.from({ length: dotCount }, (_, index) => {
+    const dot = document.createElement('button');
+    const position = Math.round((index / (dotCount - 1)) * 100);
+
+    dot.type = 'button';
+    dot.className = 'scroll-dot';
+    dot.setAttribute('aria-label', `Scroll to ${position}% of this page`);
+    dot.title = `${position}%`;
+    dot.addEventListener('click', () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: (maxScroll * index) / (dotCount - 1), behavior: 'smooth' });
+    });
+
+    scrollDots.append(dot);
+    return dot;
+  });
+
+  document.body.append(scrollDots);
+
+  let ticking = false;
+
+  function updateScrollDots() {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const canScroll = maxScroll > 80;
+    const progress = canScroll ? window.scrollY / maxScroll : 0;
+    const activeIndex = Math.round(progress * (dotCount - 1));
+
+    scrollDots.hidden = !canScroll;
+    dots.forEach((dot, index) => {
+      const isActive = index === activeIndex;
+      dot.classList.toggle('is-active', isActive);
+      dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+
+    ticking = false;
+  }
+
+  function requestDotUpdate() {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(updateScrollDots);
+    }
+  }
+
+  window.addEventListener('scroll', requestDotUpdate, { passive: true });
+  window.addEventListener('resize', requestDotUpdate, { passive: true });
+  updateScrollDots();
+}
+
+initPageEnhancements();

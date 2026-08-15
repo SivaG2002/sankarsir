@@ -14,6 +14,13 @@
 
 html {
   scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -22,6 +29,8 @@ body {
   color: var(--ink);
   font-family: "DM Sans", sans-serif;
   overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 a {
@@ -2756,5 +2765,84 @@ em::after {
     grid-column: 2;
     grid-row: 2;
     justify-self: end;
+  }
+}
+
+/* Page entry motion and the five-dot scroll control. The browser scrollbar is
+   hidden above, but the page still scrolls normally with mouse, touch and keys. */
+.scroll-dots {
+  position: fixed;
+  top: 50%;
+  right: clamp(10px, 2vw, 28px);
+  z-index: 30;
+  display: grid;
+  gap: 13px;
+  transform: translateY(-50%);
+}
+
+.scroll-dots[hidden] {
+  display: none;
+}
+
+.scroll-dot {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  outline: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.scroll-dot:hover,
+.scroll-dot:focus-visible {
+  border-color: #4668e5;
+  background: rgba(70, 104, 229, .22);
+  transform: scale(1.12);
+}
+
+.scroll-dot.is-active {
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-animate {
+    animation: landing-text-reveal .7s cubic-bezier(.2, .75, .25, 1) var(--landing-delay, 0ms) both;
+  }
+
+  @keyframes landing-text-reveal {
+    from {
+      opacity: 0;
+      filter: blur(5px);
+      transform: translateY(24px);
+    }
+
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .landing-animate,
+  .scroll-dot {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .scroll-dots {
+    display: none;
   }
 }
